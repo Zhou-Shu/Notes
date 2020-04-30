@@ -1,0 +1,362 @@
+\documentclass[UTF8]{ctexart}
+\usepackage{amsmath}
+\title{随机过程笔记}
+\author{周澍}
+\date{\today}
+\begin{document}
+\maketitle
+\section{介绍}
+
+\subsection{定义：随机过程(Stochastic processes)}
+
+
+This is the term used to denote a dynamical system which evolves with time in a non-deterministic manner. More precisely, a stochastic (or random) process is a collection of random variables $(X_i: i ∈ I)$, where i is an index taking values in an index set I. I restrict I to two important cases, either it is the non-negative integers 0, 1, . . . or the interval $[0, ∞)$. These index sets are ordered, and we will usually think of i as indexing time, denoted by n = 0, 1, . . . if time is discrete, or t ≥ 0 if time is continuous. Typically the random variables comprising a stochastic process are neither independent or identically distributed.
+
+\
+
+设\begin{math}
+    {\displaystyle (\Omega ,{\mathcal {F}},P)}
+\end{math}为一概率空间，另设集合T为一指标集合。如果对于所有${\displaystyle t\in T}$，
+均有一随机变量${\displaystyle \xi _{t}(\omega )}$定义于概率空间
+${\displaystyle (\Omega ,{\mathcal {F}},P)}$，
+则集合${\displaystyle \{\xi _{t}(\omega )|t\in T\}}$为一随机过程。
+
+\
+
+如上所述： 随机过程实际为一个指标集（时间）加上一个概率空间，而指标集可以分为两种：
+其一是离散的其值只能取自然数；而另一是连续的，只需大于0即可。
+
+\section{马尔科夫链}
+
+\subsection{定义：马尔科夫链（Markov Chains）}
+
+A system evolves in discrete time $n=0,1, 
+\ldots,$ and it takes values in a discrete state space 
+$\mathcal{S}=\{0,1, \ldots, N\},$ where $N$ is a positive 
+integer, or $\mathcal{S}$ can be a subset. Sometimes $\mathcal{S}$ is infinite, e.g., $\mathcal{S}=\{0,1, \ldots\},$ and sometimes $\mathcal{S}$ is multi-dimensional（此处多元并非指的是空间统计学的随机点过程的那种情况，空间统计学中，随机点过程实际上是指标集n是多维的，而非状态s）. 
+
+Let $X_{n}$ denote the system state at time $n \geq 0,$ a random variable, and $X_{0}$ is the initial state, usually fixed. Denote states by letters $i, j, k, \ldots$ or $x_{0}, x_{1}, \ldots,$ according to convenience.
+
+\
+
+注：以上说明了马尔科夫链是一个离散的随机过程，实际为其马尔科夫过程定义在离散集合上（离散时间，离散状态）的情况。
+
+\
+
+\subsubsection{Definition 1.} Say that the sequence of random variables $\left(X_{n}\right)$ is a Markov chain (abbreviated to MC), or is Markov dependent, if for each $n \geq 1,$ and all states $x_{0}, x_{1}, \ldots, x_{n+1},$ we have
+$$
+P\left(X_{n+1}=x_{n+1} | X_{0}=x_{0}, \ldots, X_{n}=x_{n}\right)=P\left(X_{n+1} | X_{n}=x_{n}\right)
+$$
+
+即当前的概率只与上一时刻的概率有关，这种性质（Markov dependent）也被称之为无记忆性
+
+\
+
+The conditional probability on the right-hand side is called a \textbf{one-step transition probability}, and it could depend on absolute time. We assume this is never the case, i.e. we deal with the case of \textbf{homogeneous} transition probabilities, and write them as
+$$
+p_{i j}:=P\left(X_{n+1}=j | X_{n}=i\right), \quad( i, j \in \mathcal{S}),\forall n \in index\ set
+$$
+
+（所谓均匀的随机过程，即为与绝对时间无关，而只与相对时间有关的随机过程。具有此性质的马尔科夫链被称为 \textbf{时齐马尔可夫链或者静态马尔可夫链}）
+
+\
+
+因此对于这种one-step probability来说： 可用$p_{i j}$ 代表  $i \mapsto j,$ 的transition probability，而这种所有的一步的转移概率就包含了马尔科夫链的基本信息。 将其用矩阵表示： $\mathcal{P}=\left[p_{i j}\right]$ called \textbf{ the one-step transition matrix (tpm)}. For example, if $\mathcal{S}=\{1, \ldots, N\},$ then the general pattern is
+$$
+\mathcal{P}=\left[\begin{array}{cccc}
+p_{11} & p_{12} & \cdots & p_{1 N} \\
+p_{21} & p_{22} & \cdots & p_{2 N} \\
+\vdots & \vdots & \vdots & \vdots \\
+p_{N 1} & p_{N 2} & \cdots & p_{N N}
+\end{array}\right]
+$$
+Remember, $i$ labels rows, and $j$ labels columns, and the $i$ -th row elements are $p_{i 1}, p_{i 2}, \ldots, p_{i N},$ which collectively are the conditional probabilities that the MC jumps from state $i$ to somewhere in $\mathcal{S} .$ Consequently these probabilities must sum to unity（每行的元素相加就会等于1）,
+$$
+\sum_{j \in S} p_{i j}=\sum_{j \in S} P\left(X_{n+1}=j | X_{n}=i\right)=1, \quad(i \in \mathcal{S})
+$$
+
+
+
+\subsubsection{Definition 2.} A matrix whose elements are non-negative and whose row sums are unity(1) is called a
+stochastic matrix.
+
+\
+
+注：故所有的马尔科夫链的one-step transition matrix都是stochastic matrix。但one-step transition matrix可以独立于马尔科夫链存在，只是每一个one-step transition matrix都能代表一个马尔科夫链罢了。
+
+\subsection{构造马尔科夫模型}
+
+There are two broad approaches to Markov model building: The first is to simply assume a system can be modelled as a Markov chain(即设研究对象是马尔科夫链); A second approach to Markov model building is by starting with more primitive descriptions of the system and building a stochastic process description which is shown to be a MC. It may be possible to build more than one MC model（拿一个已经是马尔科夫链的模型去描述系统）
+
+\
+
+具体可以看notes上的例题
+
+\section{基本马尔科夫链分布理论}
+
+\subsection{瞬时分布 Transient distributions} Define $n$ -step transition probabilities for $n=1,2, \ldots$ by
+$$
+p_{i j}^{(n)}=P\left(X_{n}=j | X_{0}=i\right), \quad(i, j \in \mathcal{S})
+$$
+i.e., $p_{i j}^{(n)}$ is the conditional probability that the chain occupies state $j$ at time $n,$ given that it started at time 0 in state $i .$ Denote the $n$ -step transition matrix by $\mathcal{P}^{(n)}=\left[p_{i j}^{(n)}\right] .$ Thus $\mathcal{P}(1)=\mathcal{P},$ and it is convenient to define $\mathcal{P}(0)$ to be the identity matrix,
+$$
+p_{i j}^{(0)}=\delta_{i j}:=\left\{\begin{array}{ll}
+1 & \text { if } i=j \\
+0 & \text { if } i \neq j
+\end{array}\right.
+$$
+Note that $\mathcal{P}^{(n)}$ is a stochastic matrix. The time homogeneity assumption implies that if $m=0,1, \ldots,$ then
+$$
+P\left(X_{m+n}=j | X_{m}=i\right)=p_{i j}^{(n)}
+$$
+
+以上定义n步的转移概率的随机矩阵，以下为求其的方法：
+
+\
+
+\subsubsection{引理 1} If $A, B, C$ are events then
+$$
+P(A B | C)=P(A | B C) P(B | C)
+$$
+\textbf{Proof.} 通过条件概率的定义
+$$
+P(A B |C)=
+P(A B C) / P(C)=P(A | B C)\frac{P(B C) }{P(C)}
+=P(A | B C) P(B | C)
+$$
+引理即得证
+
+\subsubsection{定理1}
+
+求n步转移概率矩阵的方法：n步转移矩阵是$\mathcal{P}$的n次方，即
+$\mathcal{P}^{(n)}=\mathcal{P}^{n}$
+矩阵形式为：
+$$
+p_{i j}^{(n)}=\sum_{k \in S} p_{i k} p_{k j}^{(n-1)}, \quad(i, j \in \mathcal{S})
+$$
+
+\textbf{proof 1.} The events $\left\{X_{1}=k\right\}$ with $k \in \mathcal{S}$ partition the sample space. So if $n \geq 2,$ then
+$$
+\begin{aligned}
+p_{i j}^{(n)} &=\sum_{k} P\left(X_{n}=j, X_{1}=k | X_{0}=i\right)=\sum_{k} P\left(X_{n}=j | X_{1}=k, X_{0}=i\right) P\left(X_{1}=k | X_{0}=i\right) \\
+&=\sum_{k} P\left(X_{n}=j | X_{1}=k\right) p_{k j}=\sum_{k} p_{k j}^{(n-1)} p_{i k}
+\end{aligned}
+$$
+where the second equality follows from Lemma $1,$ the third from the Markov dependence assumption.(由于上面的p是固定的所以，此定理只在homogeneous MC的情况下实现。)
+
+\
+
+然后通过归纳：
+$$
+\mathcal{P}^{(n)}=\mathcal{P} \mathcal{P}^{(n-1)}=\mathcal{P}\left(\mathcal{P} \mathcal{P}^{(n-2)}\right)=\mathcal{P}^{2} \mathcal{P}^{(n-2)}=\cdots=\mathcal{P}^{n} \mathcal{P}^{0}=\mathcal{P}^{n}
+$$
+由此定理得证。
+
+\
+
+注：再次强调，此定理只是在时齐马尔科夫链条件下成立的
+
+\subsubsection{The Chapman-Kolmogorov equations:} If $m, n \geq 0$ then
+$$
+p_{i j}^{(m+n)}=\sum_{k \in \mathcal{S}} p_{i k}^{(m)} p_{k j}^{(n)}, \quad(i, j \in \mathcal{S})
+$$
+Proof. The right-hand side is the $(i, j)$ element of the matrix product $\mathcal{P}^{(m)} \mathcal{P}^{(n)} .$ It follows from ( 2 ) that this is
+$$
+\mathcal{P}^{m} \mathcal{P}^{n}=\mathcal{P}^{m+n}=\mathcal{P}^{(m+n)}=[\  p_{i j}^{(m+r)}\ ]
+$$
+
+
+\subsubsection{定理二}
+
+以上皆是转移概率矩阵的讨论，如果定义初始状态与转移的步数，那么我们就可以得到一个记录转移到所有状态的概率的向量。所用方法即为用初始状态直接乘转移概率矩阵。
+
+\
+
+The probability that the MC is in state $j$ at time $n$ is
+$$
+a_{j}^{(n)}:=P\left(X_{n}=j\right)=\sum_{i \in \mathcal{S}} a_{i} p_{i j}^{(n)}, \quad(j \in \mathcal{S})
+$$
+化为矩阵乘法结果则为：$\vec{a}^{(n)}=\vec{a} \mathcal{P}^{n}$.
+
+\subsection{Mean occupation times} 
+
+Let $\left(X_{n}\right)$ be a Markov chain, and fix a state $j \in \mathcal{S} .$ Define indicator variables: For $ n=0,1, \ldots $ let :
+$$
+\begin{array}{ll}
+ & \\
+I_{n}(j)=\left\{\begin{array}{ll}
+1 & \text { if } X_{n}=j \\
+0 & \text { if } X_{n} \neq j
+\end{array}\right.
+\end{array}
+$$
+Thus $I_{n}(j)=1$ says that the MC occupies state $j$ at time $n .$ The probability of this event is $p_{i j}^{(n)}$ if $X_{0}=i,$ so you see that $I_{n}(j)$ has a Bernoulli law whose parameter is $p_{i j}^{(n)} .$ 
+
+定义随机变量$I_{n}(j)$，在时间$n$下，若在$j$状态就即为1，否则即为0，所以此随机变量会服从两点分布。
+
+故有如下引理：
+
+\subsubsection{引理 2. $E\left(I_{n}(j) | X_{0}=i\right)=p_{i j}^{(n)}$} 
+
+\subsubsection{定义$N_n(j)$与$m_{i j}(n)$}
+使
+$$
+\begin{array}{l}
+\\
+\qquad N_{n}(j)=\sum_{m=0}^{n} I_{m}(j)
+\end{array}
+$$
+
+为在n个时间内经过$j$状态的次数，称其为the occupation time of the state $j$ (up to time $n$ ). 与在泊松分布中学习的$N_n(x)$是一致的，不过泊松分布只有一种状态，故就只有$x$此点有或无的区别。
+
+注：如果初始状态为$j$的话，那么上面的$\sum_{j \in S} N_{n}(j)=n+1 .$ 
+
+\
+
+我们更为关注 $N_n(j)$的均值，故使
+
+$$m_{i j}(n)=E\left(N_{n}(j) | X_{0}=i\right),$$ 
+
+defined for all $i, j \in \mathcal{S} .$ 由以上元素组成的矩阵记为$M(n)$，以下为其值的求法。
+
+\subsubsection{定理 3.} The mean occupation time matrix is
+$$
+M(n)=\sum_{m=0}^{n} \mathcal{P}^{m}
+$$
+Proof. It follows from Lemma 2 and the definition of $m_{ji}(n)$ that
+$$
+m_{i j}(n)=E\left[\sum_{m=0}^{n} I_{m}(j) | X_{0}=i\right]=\sum_{m=0}^{n} E\left[I_{m}(j) | X_{0}=i\right]=\sum_{m=0}^{n} p_{i j}^{(m)}
+$$
+The right-hand side is the $(i, j)$ element of the right-hand side of ( 7)
+The mean proportion of time up to $n$ spent in state $j$ is just $m_{i j}(n) /(n+1) .^{1}$ This quantity may be
+of interest in applications. For example, what proportion of days are sunny or, in what proportion of weeks does the machine seller order stock replacements?
+
+\
+
+Ps：Computation of $M(n)$ is tedious if $n$ is large. It is possible to write code for directly computing the
+sum ( 7 ), though if $n$ is not very large, recursive computing using $M(n)=\mathcal{I}+\mathcal{P} \times M(n-1)$ is quite quick. Here $\mathcal{I}$ is the identity matrix.
+(用递归去写算法！)
+
+\section{平稳状态分析和极限分布(Long-term Behaviour)}
+
+\subsection{limit low}
+\subsubsection{Definition 1.} If the limit
+$$
+\pi_{i j}=\lim _{n \rightarrow \infty} p_{i j}^{(n)}
+$$（若${\lim }_{n \rightarrow \infty} p_{i j}^{(n)}$收敛，则记为$\pi_{i j}$）
+
+exists for all $i, j \in \mathcal{S},$ and if
+$$
+\sum_{j \in \mathcal{S}} \pi_{i j}=1, \quad(i \in \mathcal{S})
+$$
+then for each $i$ we say that the row vector $\vec{\pi}_{i}=\left(\pi_{i j}: j \in \mathcal{S}\right)$ is \textbf{a limit law (or limiting distribution)}. Thus the definition requires existence of the limits and that each $\vec{\pi}_{i}$ is a probability mass function. In addition, the definition leaves open the possibility that limit laws depend on the initial state. Our first result shows that computing limit laws can be replaced with the simpler task of solving a linear system.
+
+\subsubsection{Theorem 1. } If $\vec{\pi}_{i}$ is a limit law, then $\vec{\pi}_{i}=\vec{\pi}_{i} \mathcal{P},$ i.e.,
+$$
+\pi_{i j}=\sum_{k \in S} \pi_{i k} p_{k j}, \quad(i, j \in \mathcal{S}) 
+$$
+
+（以上等式被称之为\textbf{ balance equations (or the balance system).}）
+
+Proof. Define the square matrix $\Pi=\left[\pi_{i j}\right]$, which exists by assumption. Definition 1 can be restated as $\Pi=\lim _{n \rightarrow \infty} \mathcal{P}^{n} .$ But $\mathcal{P}^{n}=\mathcal{P}^{n-1} \mathcal{P},$ so
+$$
+\Pi=\lim _{n \rightarrow \infty} \mathcal{P}^{n}=\lim _{n \rightarrow \infty} \mathcal{P}^{n-1} \mathcal{P}=\Pi P
+$$
+This is the matrix version of ( 2)
+
+注：$\pi_i$是一个从$i$到各个状态的向量，由以上定理，无论从哪一种状态开始到一指定状态的概率都应一致。因为方程是一样的即 $\vec{\pi}_{i}=\vec{\pi}_{i} \mathcal{P},$ 且$\sum_j\pi_{ij}=1$。当然，最后产生的矩阵的各行是有可能不相等的，那说明在这个矩阵中存在两个马尔科夫链，即第二个条件有所区别，在$\mathcal{P}$中，一些行的某些状态加起来等于1，其余状态之和等于0。而其余的状态可能在另一些行加起来等于1。这说明而不相等的行的非零状态之间应当不能互通。
+
+
+\subsection{stationary law}
+
+\subsubsection{Definition 2. }
+Call any non-negative solution $\vec{\pi}$ of the balance plus mass equations \textbf{a stationary law},
+
+i.e., $$\pi_i=\vec{\pi} P \quad \& \quad \sum_{j \in S} \pi_{j}=1$$
+
+即满足以上两个条件的$\pi_i$，就被称之为stationary law。
+
+\subsubsection{Theorem 2.} \textbf{不管乘$\mathcal{P}$几次$\vec{\pi}$始终不变}
+
+ If $\vec{\pi}$ is a stationary law and $X_{0} \sim \vec{\pi}$ (i.e., $\vec{\pi}$ is an initial law), then $X_{n} \sim \vec{\pi}$ for all $n \geq 1$
+
+\
+
+Proof. Iterate (3) repeatedly to get
+$$
+\vec{\pi}=\vec{\pi} P=(\vec{\pi} P) \mathcal{P}=\vec{\pi} P^{2}=\cdots=\vec{\pi} P^{n}\eqno{(4)}
+$$
+So if $P\left(X_{0}=j\right)=\pi_{j},$ then the $j$ -th element on the right-hand side of ( 4) is $P\left(X_{n}=j\right),$ and it equals $\pi_{j} .$
+
+\
+
+
+
+\
+
+This result says that the laws of $X_{n}$ are independent of $n$, or stationary in time, if the initial law is stationary in the sense of Definition 2. This explains the terminology. In addition, the identity (4) shows that a stationary law is an \textbf{eigenvector} of all powers $\mathcal{P}^{n}$.
+
+实际上为左特征向量$\sigma(v)=Av=\lambda v\to{\displaystyle A^{\textsf {T}}u^{\textsf {T}}=\kappa u^{\textsf {T}}\to
+{\displaystyle uA=\kappa u}}$。根据特征向量定义，特征向量$u$为$\pi_i$(与右特征向量不同此处为行向量。)，$A$为线性变换对应的矩阵为$\mathcal{P}^{n}$，而特征值$\kappa$则为1
+
+\
+
+The next result follows from Theorem 1 and Definition 2.
+
+\
+
+\subsubsection{Theorem 3.} \textbf{Any limit law is a stationary law.}
+
+\
+
+The next result is stated in terms of MC concepts so far introduced, but actually it is a matrix theory assertion; any finite stochastic matrix has a unit eigenvalue and a corresponding non-trivial left eigenvector having non-negative elements, and which can be normalized to be a pmf.
+
+\subsubsection{Theorem 4} If $\mathcal{S}$ is finite, then at least one stationary law exists. If $\mathcal{S}$ is infinite there may be no stationary law (i.e. either the balance equations have no non-negative solution, or such solutions exist, but $\left.\sum_{j} \pi_{j}=\infty\right)$
+Denote the identity matrix on $\mathcal{S}$ by $\mathcal{I},$ i.e., $\mathcal{I}=\mathcal{P}^{0}$.
+(不知道这个定理是怎么证来的。。。)
+
+\subsection{occupation law} 
+
+\subsubsection{Definition 3.} If
+$$
+\pi_{i j}^{*}:=\lim _{n \rightarrow \infty} m_{i j}(n) / n
+$$
+exists for all $i, j \in \mathcal{S}$ and $\sum_{j \in \mathcal{S}} \pi_{i j}^{*} \equiv 1,$ then $\vec{\pi}_{i}^{*}=\left(\pi_{i j}^{*}: j \in \mathcal{S}\right)$ is called an \textbf{occupation law.} In matrix form,
+
+
+$$
+M(n)=\sum_{m=0}^{n} \mathcal{P}^{m}
+$$
+$$
+\Pi^{*}=\left[\pi_{i j}^{*}\right]=\lim _{n \rightarrow \infty} n^{-1}\left(\mathcal{I}+\mathcal{P}+\cdots+\mathcal{P}^{n}\right)
+$$
+
+\subsubsection{Theorem 5.} \textbf{An occupation law is a stationary law.}
+
+\
+
+Proof. We are assuming that the defining limits exist, so the right-hand side of ( 5 ) equals
+$$
+\lim _{n \rightarrow \infty}(\mathcal{I} / n)+\lim _{n \rightarrow \infty} n^{-1}\left(\mathcal{P}+\cdots+\mathcal{P}^{n}\right)=[0]+\lim _{n \rightarrow \infty} n^{-1}\left(\mathcal{I}+\cdots+\mathcal{P}^{n-1}\right) \mathcal{P}=\Pi^{*} \mathcal{P}
+$$
+i.e., $\Pi^{*}=\Pi^{*} \mathcal{P}$. The rows of this matrix identity have the form (3), i.e., $\vec{\pi}^{*}$ is stationary.
+
+\subsubsection{Theorem $6 .$} \textbf{A limit law is also an occupation law.}
+
+\
+
+Proof. This follows from the definitions of limit and occupation laws, and the mathematical result which asserts that if a sequence of numbers converge, then arithmetic averages of the sequence converge to the same limit, i.e., if $a_{n} \rightarrow a$ then $\left(a_{0}+\cdots+a_{n}\right) / n \rightarrow a$(拆开累加，用$N - \delta$易得，把其中的a换成$\mathcal{P}$则可得证明)
+
+故综上所述：
+
+$$limit\ law\to occupation\ law \to stationary\ law \to  $$
+
+\subsection{Resolution}
+
+由notes中例题可知，状态与状态之间是可以通过$\mathcal{P}$连通的，而这种连通关系可以状态与状态之间组成等价类的。
+\subsubsection{Definition 4.} A Markov chain (more precisely, its state space) is said to be \textbf{irreducible} if for each pair of states $i$ and $j,$ there is an integer $n_{i j}$ such that $p_{i j}^{\left(n_{i j}\right)}>0 .$ (Note that this includes the case $i=j .$ ) If $\mathcal{S}$ is not irreducible then it is called \textbf{reducible.}
+
+所有状态都互相连通的马尔科夫链，被称之为irreducible的马尔科夫链，
+
+\end{document}
+
